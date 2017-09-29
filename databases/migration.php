@@ -17,7 +17,7 @@
                         "name"          =>  "VARCHAR(30) NOT NULL",
                         "phone_number"  =>  "VARCHAR(15) NOT NULL",
                         "RFIDcard_id"   =>  "VARCHAR(15)",
-                        "balance"       =>  "FLOAT DEFAULT 0",
+                        "balance"       =>  "FLOAT DEFAULT 550",
                         "created_at"    =>  "DATETIME DEFAULT CURRENT_TIMESTAMP",
                         "updated_at"    =>  "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
                         ""              =>  "FOREIGN KEY (RFIDcard_id) REFERENCES RFIDcards(id) ON DELETE CASCADE",

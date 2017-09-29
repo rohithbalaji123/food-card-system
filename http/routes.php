@@ -4,6 +4,7 @@
     
     require 'http/controllers/vendorController.php';
     require 'http/controllers/rfidCardController.php';
+    require 'http/controllers/customerController.php';
 
     function getResponse($message, $status) {
         header('HTTP/1.0 ' . $status);
@@ -25,6 +26,10 @@
 
                 case '/rfidcard/register':
                     require 'views/rfidcardRegister.html';
+                    break;
+
+                case '/customer/register':
+                    require 'views/customerRegister.html';
                     break;
 
                 default:
@@ -60,6 +65,17 @@
                 case '/rfidcard/register':
                     try {
                         addRFIDCard();
+                    }
+                    catch(Exception $e) {
+                        echo getResponse($e->getMessage(), '400 Bad Request');
+                        return;
+                    }
+                    echo getResponse('Successful...', '200 OK');
+                    break;
+
+                case '/customer/register':
+                    try {
+                        addCustomer();
                     }
                     catch(Exception $e) {
                         echo getResponse($e->getMessage(), '400 Bad Request');
