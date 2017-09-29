@@ -17,4 +17,4 @@
 
     $base_url = getCurrentUri();
 
-    executeFunctionByUri($base_url);
+    executeFunctionByUri($base_url, $_SERVER['REQUEST_METHOD']);
