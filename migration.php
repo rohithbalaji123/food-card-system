@@ -25,6 +25,8 @@
 
         "vendors"   =>  array(
                         "id"            =>  "INT PRIMARY KEY AUTO_INCREMENT",
+                        "username"      =>  "VARCHAR(30) NOT NULL UNIQUE",
+                        "password"      =>  "VARCHAR(70) NOT NULL",
                         "shop_name"     =>  "VARCHAR(30) NOT NULL",
                         "owner_name"    =>  "VARCHAR(30) NOT NULL",
                         "phone_number"  =>  "VARCHAR(15) NOT NULL",
@@ -115,7 +117,7 @@
         }
 
         close_db_conn($conn);
-        echo "Table creation successful.";
+        echo "Table creation successful.\n";
     }
 
     migrate();
