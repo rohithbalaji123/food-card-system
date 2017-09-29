@@ -1,6 +1,15 @@
 <?php
     
+    require __DIR__ . '/../databases/db_connection.php';
+    
     require 'http/controllers/vendorController.php';
+    require 'http/controllers/rfidCardController.php';
+
+    function getResponse($message, $status) {
+        header('HTTP/1.0 ' . $status);
+        header('Content-Type: application/json');
+        return json_encode(array("message" => $message));
+    }
 
     function executeFunctionByUri($uri, $method) {
         
@@ -12,6 +21,10 @@
 
                 case '/vendor/register':
                     require 'views/vendorRegister.html';
+                    break;
+
+                case '/rfidcard/register':
+                    require 'views/rfidcardRegister.html';
                     break;
 
                 default:
@@ -27,13 +40,10 @@
                         authenticateVendor();
                     }
                     catch(Exception $e) {
-                        header('HTTP/1.0 401 Unauthorized');
-                        header('Content-Type: application/json');
-                        echo json_encode(array("message" => $e->getMessage()));
+                        echo getResponse($e->getMessage(), '401 Unauthorized');
                         return;
                     }
-                    header('Content-Type: application/json');
-                    echo json_encode(array("message" => "Successful..."));
+                    echo getResponse('Successful...', '200 OK');
                     break;
 
                 case '/vendor/register':
@@ -41,13 +51,21 @@
                         addVendor();
                     }
                     catch(Exception $e) {
-                        header('HTTP/1.0 400 Bad Request');
-                        header('Content-Type: application/json');
-                        echo json_encode(array("message" => $e->getMessage()));
+                        echo getResponse($e->getMessage(), '400 Bad Request');
                         return;
                     }
-                    header('Content-Type: application/json');
-                    echo json_encode(array("message" => "Successful..."));
+                    echo getResponse('Successful...', '200 OK');
+                    break;
+
+                case '/rfidcard/register':
+                    try {
+                        addRFIDCard();
+                    }
+                    catch(Exception $e) {
+                        echo getResponse($e->getMessage(), '400 Bad Request');
+                        return;
+                    }
+                    echo getResponse('Successful...', '200 OK');
                     break;
 
                 default:

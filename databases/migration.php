@@ -7,7 +7,7 @@
         // table_name => columns ( coumn_name => column_type)
         "RFIDcards"  =>  array(
                         "id"            =>  "VARCHAR(15) PRIMARY KEY",
-                        "expiry_date"   =>  "DATETIME NOT NULL",
+                        "expiry_date"   =>  "DATETIME NOT NULL DEFAULT '2020-01-01 00:00:00'",
                         "created_at"    =>  "DATETIME DEFAULT CURRENT_TIMESTAMP",
                         "updated_at"    =>  "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
                     ),
