@@ -51,8 +51,8 @@
                         "amount"        =>  "FLOAT NOT NULL",
                         "created_at"    =>  "DATETIME DEFAULT CURRENT_TIMESTAMP",
                         "updated_at"    =>  "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
-                        ""              =>  "FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE",
-                        ""              =>  "FOREIGN KEY (vendor_id) REFERENCES vendors(id) ON DELETE CASCADE",
+                        ""              =>  `FOREIGN KEY (customer_id) REFERENCES customers(id) ON DELETE CASCADE, 
+                                             FOREIGN KEY (vendor_id) REFERENCES vendors(id) ON DELETE CASCADE`,
                     ),
 
         "bill_details"=> array(
@@ -63,8 +63,8 @@
                         "bill_id"       =>  "INT NOT NULL",
                         "created_at"    =>  "DATETIME DEFAULT CURRENT_TIMESTAMP",
                         "updated_at"    =>  "DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
-                        ""              =>  "FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE",
-                        ""              =>  "FOREIGN KEY (bill_id) REFERENCES bills(id) ON DELETE CASCADE",
+                        ""              =>  `FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE, 
+                                             FOREIGN KEY (bill_id) REFERENCES bills(id) ON DELETE CASCADE`,
                     ),
     );
 

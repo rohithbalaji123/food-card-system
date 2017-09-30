@@ -1,5 +1,7 @@
 <?php
-    require(__DIR__ . '/http/routes.php');
+    require(__DIR__ . '/../http/routes.php');
+
+    session_start();
 
     /**
      * function to slice the uri from the request received

@@ -1,4 +1,12 @@
 <?php
+    
+    function isVendorLoggedIn() {
+        return  ( isset($_SESSION["username"]) && 
+                  isset($_SESSION["vendorId"]) && 
+                 !empty($_SESSION["username"]) && 
+                 !empty($_SESSION["vendorId"])
+                );        
+    }
 
     function authenticateVendor() {
         
@@ -11,12 +19,13 @@
 
         $conn = open_db_conn();
 
-        $stmt = $conn->prepare("SELECT password FROM vendors WHERE username = ? LIMIT 1");
+        $stmt = $conn->prepare("SELECT id, password FROM vendors WHERE username = ? LIMIT 1");
         $stmt->bind_param("s", $username);
 
-        mysqli_stmt_execute($stmt);
-        mysqli_stmt_bind_result($stmt, $hashedPasswordFromDB);
-        mysqli_stmt_fetch($stmt);
+        $stmt->execute($stmt);
+        $stmt->bind_result($vendorId, $hashedPasswordFromDB);
+        $stmt->fetch($stmt);
+        $stmt->close();
 
         close_db_conn($conn);
 
@@ -24,7 +33,14 @@
             throw new Exception("Username and password mismatch");
         }
 
+        $_SESSION["username"] = $username;
+        $_SESSION["vendorId"] = $vendorId;
         return true;
+    }
+
+    function logoutVendor() {
+        $_SESSION = array();
+        session_destroy();
     }
 
     function addVendor() {

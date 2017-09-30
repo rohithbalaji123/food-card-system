@@ -24,7 +24,7 @@
      */
     function open_db_conn() {
 
-        $env_variables = file(".env");
+        $env_variables = file("../.env");
 
         foreach($env_variables as $env_variable) {
             $temp = explode("=", $env_variable);
