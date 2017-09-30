@@ -1,5 +1,9 @@
 <?php
     
+    /**
+     * Helper function to find whether a vendor is loggedin or not
+     * @return boolean true or false depending on whether a vendor is logged in or not respectively
+     */
     function isVendorLoggedIn() {
         return  ( isset($_SESSION["username"]) && 
                   isset($_SESSION["vendorId"]) && 
@@ -8,6 +12,9 @@
                 );        
     }
 
+    /**
+     * Function to authenticate vendor after verifying the credentials and set session if authenticated
+     */
     function authenticateVendor() {
         
         if(!isset($_POST["username"]) || !isset($_POST["password"])) {
@@ -38,11 +45,17 @@
         return true;
     }
 
+    /**
+     * Function to logout vendor by unsetting sessions
+     */
     function logoutVendor() {
         $_SESSION = array();
         session_destroy();
     }
 
+    /**
+     * Function to add a vandor to vendors table
+     */
     function addVendor() {
 
         if(!isset($_POST["username"]) || !isset($_POST["password"]) || !isset($_POST["shop_name"]) || !isset($_POST["owner_name"]) || !isset($_POST["phone_number"])) {

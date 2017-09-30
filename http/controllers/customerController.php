@@ -1,5 +1,8 @@
 <?php
     
+    /**
+     * function to add a customer in customers table
+     */
     function addCustomer() {
 
         if(!isset($_POST["name"]) || !isset($_POST["phone_number"]) || !isset($_POST["RFIDcard_id"])) {

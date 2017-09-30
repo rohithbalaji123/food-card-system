@@ -1,5 +1,8 @@
 <?php
     
+    /**
+     * Function to add RFIDCard details to RFIDcards table
+     */
     function addRFIDCard() {
 
         if(!isset($_POST["rfidcard_id"])) {
