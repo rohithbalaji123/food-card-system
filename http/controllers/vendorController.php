@@ -29,9 +29,9 @@
         $stmt = $conn->prepare("SELECT id, password FROM vendors WHERE username = ? LIMIT 1");
         $stmt->bind_param("s", $username);
 
-        $stmt->execute($stmt);
+        $stmt->execute();
         $stmt->bind_result($vendorId, $hashedPasswordFromDB);
-        $stmt->fetch($stmt);
+        $stmt->fetch();
         $stmt->close();
 
         close_db_conn($conn);
