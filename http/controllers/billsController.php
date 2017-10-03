@@ -9,19 +9,21 @@
         $RFIDCard_id = $_POST["rfidcard_id"];
         $vendor_id = $_SESSION["vendorId"];
         $amount = $_POST["amount"];
-        $bill_details = $POST["bill_details"];
+        $bill_details = $_POST["bill_details"];
+        $bill_details = json_decode($bill_details, true);
 
+        $RFIDCard_id = trim($RFIDCard_id, '"');
 
         $conn = open_db_conn();
-        $stmt = $conn->prepare("SELECT id FROM customers WHERE RFIDcard_id = ? LIMIT 1");
+        $stmt = $conn->prepare("SELECT id FROM customers WHERE RFIDcard_id = ?");
         $stmt->bind_param("s", $RFIDCard_id);
         $stmt->execute();
         $stmt->bind_result($customer_id);
-        if(!$stmt->num_rows) {
-            throw new Exception("Invalid card.");
-        }
         $stmt->fetch();
         $stmt->close();
+        if(!$customer_id) {
+            throw new Exception("Invalid card.");
+        }
 
 
         $stmt = $conn->prepare("SELECT balance FROM customers WHERE id = ? LIMIT 1");
@@ -29,14 +31,14 @@
         $stmt->execute();
         $stmt->bind_result($balance);
         $stmt->fetch();
-        if((float)$balance < (float)$amount) {
+        if(floatval($balance) < floatval($amount)) {
             throw new Exception("Insufficient balance.");
         }
         $stmt->close();
 
         
-        $stmt = $conn->prepare("UPDATE customers SET balance - balance - " . (float)$amount . " WHERE id = ? LIMIT 1");
-        $stmt->bind_param("s", $customer_id);
+        $stmt = $conn->prepare("UPDATE customers SET balance = balance-? WHERE RFIDcard_id = ? LIMIT 1");
+        $stmt->bind_param("ds", floatval($amount), $RFIDCard_id);
         $stmt->execute();
         $stmt->close();
 
