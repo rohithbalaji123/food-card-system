@@ -83,3 +83,31 @@
 
         return true;
     }
+
+    function getVendorDetails() {
+        $vendorId = $_SESSION["vendorId"];
+
+        $conn = open_db_conn();
+
+        $stmt = $conn->prepare("SELECT username, shop_name, owner_name, phone_number FROM vendors WHERE id = ? LIMIT 1");
+        $stmt->bind_param("s", $vendorId);
+
+
+        $stmt->execute();
+        $stmt->bind_result($username, $shop_name, $owner_name, $phone_number);
+        $stmt->fetch();
+        $stmt->close();
+
+        close_db_conn($conn);
+
+        $vendorDetails = array(
+                            "vendor_id" => $vendorId,
+                            "username" => $username,
+                            "shop_name" => $shop_name,
+                            "owner_name" => $owner_name,
+                            "phone_number" => $phone_number,
+                         );
+
+        $vendorDetails["items"] = getItemByVendorId($vendorId);
+        return $vendorDetails;
+    }

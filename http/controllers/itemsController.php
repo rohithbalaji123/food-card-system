@@ -25,3 +25,25 @@
 
         return true;
     }
+
+    function getItemByVendorId($vendorId) {
+
+        $conn = open_db_conn();
+
+        $itemDetails = array();
+
+        $stmt = $conn->prepare("SELECT id, name, price FROM items WHERE vendor_id = ?");
+        $stmt->bind_param("s", $vendorId);
+
+        $stmt->execute();
+        $stmt->bind_result($id, $name, $price);
+        
+        while($stmt->fetch()) {
+            array_push($itemDetails, array("id" => $id, "name" => $name, "price" => $price));
+        }
+        
+        $stmt->close();
+        close_db_conn($conn);
+
+        return $itemDetails;
+    }
