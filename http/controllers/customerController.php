@@ -11,7 +11,7 @@
 
         $name = $_POST["name"];
         $phone_number = $_POST["phone_number"];
-        $RFIDcard_id = $_POST["RFIDcard_id"];
+        $RFIDcard_id = $_POST["rfidcard_id"];
 
         $conn = open_db_conn();
 
