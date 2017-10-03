@@ -7,7 +7,7 @@
     require '../http/controllers/customerController.php';
     require '../http/controllers/itemsController.php';
     require '../http/controllers/billsController.php';
-    // require '../http/controllers/billDetailsController.php';
+    require '../http/controllers/billDetailsController.php';
 
     /**
      * A helper function to returns response in json format
@@ -44,8 +44,12 @@
             switch($uri) {
                 // Homepage
                 case '/':
-                    require '../views/vendorLogin.html';
-                    break;
+                    if(!isVendorLoggedIn()) {
+                        redirect('/vendor/login');
+                        return;
+                    }
+                    redirect('/vendor/dashboard');
+                    return;
 
                 // Vendor login page
                 case '/vendor/login':
@@ -71,6 +75,7 @@
                     require '../views/vendorItemAdd.html';
                     return;
 
+                // Vendor dashboard which shows bills and menu items
                 case '/vendor/dashboard':
                     if(!isVendorLoggedIn()) {
                         redirect('/vendor/login');
@@ -78,6 +83,21 @@
                     }
                     require '../views/vendorDashboard.html';
                     return;
+
+                case '/vendor/details':
+                    if(!isVendorLoggedIn()) {
+                        echo getJSONResponse("Access denied.", '401 Unauthorized');
+                        return;
+                    }
+                    try {
+                        echo getJSONResponse(getVendorDetails(), '200 Successful');
+                        return;
+                    }
+                    catch(Exception $e) {
+                        echo getJSONResponse($e->getMessage(), '400 Bad Request');
+                        return;
+                    }
+                    break;
 
                 // RFID Card registration page
                 case '/rfidcard/register':
