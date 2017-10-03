@@ -4,9 +4,6 @@
      * Function to add a menu item to items table
      */
     function addMenuItem() {
-        if(!isVendorLoggedIn()) {
-            throw new Exception("Access denied.");
-        }
 
         if(!isset($_POST["name"]) || !isset($_POST["price"])) {
             throw new Exception("Parameters missing.");

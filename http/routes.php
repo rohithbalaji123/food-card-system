@@ -6,6 +6,8 @@
     require '../http/controllers/rfidCardController.php';
     require '../http/controllers/customerController.php';
     require '../http/controllers/itemsController.php';
+    require '../http/controllers/billsController.php';
+    require '../http/controllers/billDetailsController.php';
 
     /**
      * A helper function to returns response in json format
@@ -69,6 +71,14 @@
                     require '../views/vendorItemAdd.html';
                     return;
 
+                case '/vendor/dashboard':
+                    if(!isVendorLoggedIn()) {
+                        redirect('/vendor/login');
+                        return;
+                    }
+                    require '../views/vendorDashboard.html';
+                    return;
+
                 // RFID Card registration page
                 case '/rfidcard/register':
                     require '../views/rfidcardRegister.html';
@@ -102,6 +112,10 @@
 
                 // Vendor logout route
                 case '/vendor/logout':
+                    if(!isVendorLoggedIn()) {
+                        echo getJSONResponse($e->getMessage(), '401 Unauthorized');
+                        return;
+                    }
                     try {
                         logoutVendor();
                     }
@@ -124,8 +138,27 @@
                     echo getJSONResponse('Successful...', '200 OK');
                     break;
 
+                case '/vendor/bill/add':
+                    if(!isVendorLoggedIn()) {
+                        echo getJSONResponse($e->getMessage(), '401 Unauthorized');
+                        return;
+                    }
+                    try {
+                        addBill();
+                    }
+                    catch(Exception $e) {
+                        echo getJSONResponse($e->getMessage(), '400 Bad Request');
+                        return;
+                    }
+                    echo getJSONResponse('Successful...', '200 OK');
+                    break;
+
                 // Vendor menu item adding route
                 case '/vendor/item/add':
+                    if(!isVendorLoggedIn()) {
+                        echo getJSONResponse($e->getMessage(), '401 Unauthorized');
+                        return;
+                    }
                     try {
                         addMenuItem();
                     }
