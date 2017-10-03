@@ -24,12 +24,12 @@
      */
     function open_db_conn() {
 
-        $env_variables = file(".env");
+        $env_variables = file(__DIR__ . "/../.env");
 
         foreach($env_variables as $env_variable) {
             $temp = explode("=", $env_variable);
 
-            // to trim the extar space added by explode function for god knows why...
+            // to trim the extra space added by explode function for god knows why...
             $env[$temp[0]] = trim($temp[1]);
         }
 
