@@ -35,7 +35,7 @@
         $stmt->close();
 
         
-        $stmt = $conn->prepare("UPDATE customers SET balance - balance - " . $amount . " WHERE id = ? LIMIT 1");
+        $stmt = $conn->prepare("UPDATE customers SET balance - balance - " . (float)$amount . " WHERE id = ? LIMIT 1");
         $stmt->bind_param("s", $customer_id);
         $stmt->execute();
         $stmt->close();
