@@ -7,7 +7,7 @@
     require '../http/controllers/customerController.php';
     require '../http/controllers/itemsController.php';
     require '../http/controllers/billsController.php';
-    require '../http/controllers/billDetailsController.php';
+    // require '../http/controllers/billDetailsController.php';
 
     /**
      * A helper function to returns response in json format

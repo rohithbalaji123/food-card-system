@@ -2,11 +2,11 @@
     
     function addBill() {
         
-        if(!isset($_POST["customer_id"]) || !isset($_POST["bill_details"]) || !isset($_POST["amount"])) {
+        if(!isset($_POST["rfidard_id"]) || !isset($_POST["bill_details"]) || !isset($_POST["amount"])) {
             throw new Exception("Parameters missing.");
         }
 
-        $RFIDCard_id = $_POST["RFIDCard_id"];
+        $RFIDCard_id = $_POST["rfidard_id"];
         $vendor_id = $_SESSION["vendorId"];
         $amount = $_POST["amount"];
         $bill_details = $POST["bill_details"];
