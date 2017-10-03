@@ -4,8 +4,6 @@
 <head>
     <!-- UTF-8 Charset-->
     <meta charset="utf-8" />
-    <meta charset="utf-8" />
-    <meta charset="utf-8" />
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Compiled and minified CSS -->
@@ -39,73 +37,14 @@
                 <table class="bordered centered responsive-table highlight  blue-grey darken-1">
                     <thead>
                         <tr class="card-panel  teal lighten-1 white-text text-darken-2">
+                            <th>Id</th>
                             <th>Name</th>
                             <th>Price</th>
                             <th>Quantity</th>
                             <th>Amount</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>Eclair</td>
-                            <td>25</td>
-                            <td>
-                                <div class="input-field inline">
-                                    <input id="quant" type="number" value="0" min="0" class="validate center-align">
-                                </div>
-                            </td>
-                            <td>50</td>
-                        </tr>
-                        <tr>
-                            <td>Jellybean</td>
-                            <td>20</td>
-                            <td>
-                                <div class="input-field inline">
-                                    <input id="quant" type="number" value="0" min="0" class="validate center-align">
-                                </div>
-                            </td>
-                            <td>20</td>
-                        </tr>
-                        <tr>
-                            <td>Lollipop</td>
-                            <td>10</td>
-                            <td>
-                                <div class="input-field inline">
-                                    <input id="quant" type="number" value="0" min="0" class="validate center-align">
-                                </div>
-                            </td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>MarshMallow</td>
-                            <td>10</td>
-                            <td>
-                                <div class="input-field inline">
-                                    <input id="quant" type="number" value="0" min="0" class="validate center-align">
-                                </div>
-                            </td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>Nougat</td>
-                            <td>10</td>
-                            <td>
-                                <div class="input-field inline">
-                                    <input id="quant" type="number" value="0" min="0" class="validate center-align">
-                                </div>
-                            </td>
-                            <td>30</td>
-                        </tr>
-                        <tr>
-                            <td>Oreo</td>
-                            <td>10</td>
-                            <td>
-                                <div class="input-field inline">
-                                    <input id="quant" type="number" value="0" min="0" class="validate center-align">
-                                </div>
-                            </td>
-                            <td>30</td>
-                        </tr>
+                    <tbody id="table_body">
                     </tbody>
                 </table>
             </div>
@@ -119,7 +58,7 @@
                 </div>
                 <div class="card blue-grey darken-1">
                     <div class="input-field col s12">
-                        <input placeholder="RFID No." autofocus="autofocus" id="rfid_no" type="text" class="validate">
+                        <input placeholder="RFID No." autofocus="autofocus" id="rfidcard_id" type="text" class="validate">
                     </div>
                     <div class="card-content white-text">
                         <span id="customer_name" class="card-title">----------</span>
@@ -127,7 +66,7 @@
                         <p id="balance">----------</p>
                     </div>
                 </div>
-                <a class="btn-large" onclick="Materialize.toast('Transaction Successful', 4000, 'rounded')"><i class="material-icons right">send</i>Confirm</a>
+                <button class="btn-large" id="btn_submit"><i class="material-icons right">send</i>Confirm</button>
             </div>
         </div>
     </main>
@@ -147,14 +86,44 @@
     <script type="text/javascript">
     $(document).ready(function() {
 
+        var noOfMenuItems = 0;
+
+        function changeTotal() {
+            var total = 0;
+            for (var i = 0; i < noOfMenuItems; i++) {
+                total += parseInt($("#amt" + i).text());
+            }
+            $('#total').text(total);
+        }
+
         $.ajax({
             url: "/vendor/details",
             type: 'GET',
             success: function(data) {
-                console.log(data);
-                $("#shop_name").text(data.shop_name);
-                $("#owner_name").text(data.owner_name);
-                $("#phone_number").text(data.phone_number);
+                $("#shop_name").text(data.message.shop_name);
+                $("#owner_name").text(data.message.owner_name);
+                $("#phone_number").text(data.message.phone_number);
+                noOfMenuItems = data.message.items.length;
+                $.each(data.message.items, function(idx, obj) {
+                    // idx = obj.id;
+                    $("#table_body").append('<tr>\
+                            <td id="hid' + idx + '">' + obj.id + '</td>\
+                            <td>' + obj.name + '</td>\
+                            <td id="prc' + idx + '">' + obj.price + '</td>\
+                            <td>\
+                                <div class="input-field inline">\
+                                    <input id="quant' + idx + '" class="quant" type="number" value="0" min="0" class="validate center-align">\
+                                </div>\
+                            </td>\
+                            <td id="amt' + idx + '">0</td>\
+                        </tr>');
+                    $("#quant" + idx).keyup(function() {
+                        $("#amt" + idx).text($("#prc" + idx).text() * $("#quant" + idx).val());
+                        changeTotal();
+                    });
+                });
+                $("#table_body").append('<tr><td></td><td></td><td></td><td>Total</td><td id="total">0</td></tr>');
+
             },
             error: function(data) {
                 console.log(JSON.parse(data.responseText).message);
@@ -162,8 +131,35 @@
             },
         });
 
-        $("#btn_submit").click(function() {
-            //todo send details
+        $("#btn_submit").on("click", function() {
+
+            var billDetails = new Array() ;
+            for(var i=0; i<noOfMenuItems; i++) {
+                // var billItem;
+                // billItem[item_id] = $("#hid"+i);
+                // billItem[quantity] = $("#quant"+i);
+                // billItem[price] = $("#amt"+i);
+                var billItem = {
+                    "item_id": $("#hid"+i).text(),
+                    "quantity": $("#quant"+i).val(),
+                    "price": $("#amt"+i).text()
+                };
+                billDetails.push(billItem);
+            }
+
+            $.ajax({
+                url: "/vendor/bill/add",
+                type: 'POST',
+                data: { "rfidcard_id": $("#rfidcard_id").val(), "amount": $("#total").text(), "bill_details": JSON.stringify(billDetails) },
+                success: function(data) {
+                    console.log(JSON.parse(data.responseText).message);
+                    Materialize.toast(JSON.parse(data.responseText).message, 4000, 'rounded');                    
+                },
+                error: function(data) {
+                    console.log(JSON.parse(data.responseText).message);
+                    Materialize.toast(JSON.parse(data.responseText).message, 4000, 'rounded');
+                },
+            });
         });
     })
     </script>
