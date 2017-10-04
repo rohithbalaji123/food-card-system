@@ -28,6 +28,12 @@
         <nav>
             <div class="nav-wrapper teal darken-1">
                 <a href="" class="brand-logo center">SiRoDa</a>
+                <a href="#" class="right">
+                    <button class="btn-large" onclick="logout()">Logout</button>
+                </a>
+                <a href="/vendor/item/add" class="right">
+                    <button class="btn-large">Add menu</button>
+                </a>
             </div>
         </nav>
     </header>
@@ -60,11 +66,6 @@
                     <div class="input-field col s12">
                         <input placeholder="RFID No." autofocus="autofocus" id="rfidcard_id" type="text" class="validate">
                     </div>
-                    <div class="card-content white-text">
-                        <span id="customer_name" class="card-title">----------</span>
-                        <p id="phone_number">----------</p>
-                        <p id="balance">----------</p>
-                    </div>
                 </div>
                 <button class="btn-large" id="btn_submit"><i class="material-icons right">send</i>Confirm</button>
             </div>
@@ -84,9 +85,24 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <script type="text/javascript">
+    function logout() {
+        $.ajax({
+            url: "/vendor/logout",
+            type: 'POST',
+            success: function(data) {
+                console.log(data);
+                window.location.href = "/";
+            },
+            error: function(data) {
+                console.log(JSON.parse(data.responseText).message);
+                Materialize.toast(JSON.parse(data.responseText).message, 4000, 'rounded');
+            },
+        });
+    }
     $(document).ready(function() {
 
         var noOfMenuItems = 0;
+
 
         function changeTotal() {
             var total = 0;
@@ -135,16 +151,15 @@
 
             var billDetails = new Array() ;
             for(var i=0; i<noOfMenuItems; i++) {
-                // var billItem;
-                // billItem[item_id] = $("#hid"+i);
-                // billItem[quantity] = $("#quant"+i);
-                // billItem[price] = $("#amt"+i);
-                var billItem = {
-                    "item_id": $("#hid"+i).text(),
-                    "quantity": $("#quant"+i).val(),
-                    "price": $("#amt"+i).text()
-                };
-                billDetails.push(billItem);
+                    if($("#quant"+i).val() == "0") {
+                        continue;
+                    }
+                    var billItem = {
+                        "item_id": $("#hid"+i).text(),
+                        "quantity": $("#quant"+i).val(),
+                        "price": $("#amt"+i).text()
+                    };
+                    billDetails.push(billItem);
             }
 
             $.ajax({
@@ -152,8 +167,8 @@
                 type: 'POST',
                 data: { "rfidcard_id": $("#rfidcard_id").val(), "amount": $("#total").text(), "bill_details": JSON.stringify(billDetails) },
                 success: function(data) {
-                    console.log(JSON.parse(data.responseText).message);
-                    Materialize.toast(JSON.parse(data.responseText).message, 4000, 'rounded');                    
+                    console.log(data.message);
+                    Materialize.toast(data.message, 4000, 'rounded');                    
                 },
                 error: function(data) {
                     console.log(JSON.parse(data.responseText).message);

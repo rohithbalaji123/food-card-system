@@ -55,5 +55,5 @@
             addBillDetails($bill_detail["item_id"], $bill_detail["quantity"], $bill_detail["price"], $bill_id);
         }
 
-        return true;
+        return floatval($balance) - floatval($amount);
     }

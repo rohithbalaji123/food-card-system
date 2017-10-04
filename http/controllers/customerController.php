@@ -5,7 +5,7 @@
      */
     function addCustomer() {
 
-        if(!isset($_POST["name"]) || !isset($_POST["phone_number"]) || !isset($_POST["RFIDcard_id"])) {
+        if(!isset($_POST["name"]) || !isset($_POST["phone_number"]) || !isset($_POST["rfidcard_id"])) {
             throw new Exception("Parameters missing.");
         }
 

@@ -69,6 +69,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <script type="text/javascript">
     $(document).ready(function() {
+        $("form").submit(function() {
+            return false;
+        });
         $("#btn_submit").click(function() {
             //Materialize.toast($("#username").val() + $("#password").val(), 4000, 'rounded');
 

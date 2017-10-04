@@ -41,7 +41,7 @@
                         <form id="form" class="col l6 s12 offset-l3">
                             <div class="row">
                                 <div class="input-field col s12 center-align">
-                                    <input id="name" autofocus="autofocus" type="text" class="validate center-align">
+                                    <input id="name" type="text" class="validate center-align">
                                     <label for="name">Name</label>
                                 </div>
                             </div>
@@ -53,8 +53,8 @@
                             </div>
                             <div class="row">
                                 <div class="input-field col s12 center-align">
-                                    <input id="RFIDcard_id" type="text" class="validate center-align">
-                                    <label for="RFIDcard_id">RFID Card</label>
+                                    <input id="rfidcard_id" type="text" class="validate center-align">
+                                    <label for="rfidcard_id">RFID Card</label>
                                 </div>
                             </div>
                             <div class="col l6 s12 offset-l3">
@@ -81,6 +81,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
     <script type="text/javascript">
     $(document).ready(function() {
+        
         $("#btn_submit").click(function() {
             //Materialize.toast($("#username").val() + $("#password").val(), 4000, 'rounded');
 

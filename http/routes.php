@@ -164,13 +164,13 @@
                         return;
                     }
                     try {
-                        addBill();
+                        $balance = addBill();
                     }
                     catch(Exception $e) {
                         echo getJSONResponse($e->getMessage(), '400 Bad Request');
                         return;
                     }
-                    echo getJSONResponse('Successful...', '200 OK');
+                    echo getJSONResponse('Successful... Your balance is ' . $balance, '200 OK');
                     break;
 
                 // Vendor menu item adding route
