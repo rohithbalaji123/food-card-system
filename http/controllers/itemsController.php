@@ -13,15 +13,15 @@
         $price = $_POST["price"];
         $vendor_id = $_SESSION["vendorId"];
 
-        $conn = open_db_conn();
+        $conn = odbc_connect("Driver={MySQL};Server=127.0.0.1;Database=food-card-system;", "root", "root");
 
-        $stmt = $conn->prepare("INSERT INTO items (name, price, vendor_id) VALUES (?, ?, ?)");
-        $stmt->bind_param("sss", $name, $price, $vendor_id);
+        $stmt = odbc_prepare($conn, "INSERT INTO items (name, price, vendor_id) VALUES (?, ?, ?)");
+        $t = odbc_execute($stmt, array($name, $price, $vendor_id));
 
-        $stmt->execute();
-        $stmt->close();
+        // $stmt->execute();
+        // $stmt->close();
 
-        close_db_conn($conn);
+        odbc_close($conn);
 
         return true;
     }
